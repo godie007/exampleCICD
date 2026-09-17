@@ -7,3 +7,7 @@ dist/
 .vite/
 coverage/
 .claude/worktrees/
+e2e/node_modules/
+e2e/reportes/
+e2e/test-results/
+.playwright-mcp/

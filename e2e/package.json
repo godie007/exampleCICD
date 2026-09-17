@@ -1,0 +1,17 @@
+{
+  "name": "archivo-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pruebas end-to-end del directorio Archivo con Playwright",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "reporte": "node scripts/registro.js",
+    "ver-reporte": "playwright show-report reportes/html"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Una corrida por rama: un push nuevo cancela el anterior, que ya no interesa.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # node:sqlite es experimental y el proyecto lo usa sin driver externo.
+  NODE_VERSION: "22"
+
+jobs:
+  backend:
+    name: Backend · unitarias e integración
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Instalar dependencias
+        working-directory: backend
+        run: npm ci
+
+      - name: Pruebas unitarias
+        working-directory: backend
+        run: npm run test:unit
+
+      - name: Pruebas de integración
+        working-directory: backend
+        run: npm run test:int
+
+      - name: Cobertura
+        working-directory: backend
+        run: npm run test:coverage
+
+      - name: Publicar cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura-backend
+          path: backend/coverage/
+          retention-days: 14
+
+  e2e:
+    name: E2E · Playwright sobre la app viva
+    runs-on: ubuntu-latest
+    # Si el backend no pasa, la app no puede funcionar: no gastes un navegador.
+    needs: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependencias
+        run: |
+          npm --prefix backend ci
+          npm --prefix frontend ci
+          npm --prefix e2e ci
+
+      - name: Cachear navegadores de Playwright
+        id: cache-navegadores
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('e2e/package-lock.json') }}
+
+      - name: Instalar Chromium
+        working-directory: e2e
+        run: npx playwright install --with-deps chromium
+
+      # playwright.config.js levanta backend y frontend por su cuenta
+      # (reuseExistingServer: false cuando CI está definido).
+      - name: Pruebas end-to-end
+        working-directory: e2e
+        run: npm test
+
+      - name: Generar el registro de pruebas
+        if: always()
+        working-directory: e2e
+        run: npm run reporte || echo "Sin resultados que registrar"
+
+      - name: Publicar reporte y evidencia
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-e2e
+          path: |
+            e2e/reportes/
+            e2e/REGISTRO.md
+          retention-days: 14
+
+      - name: Resumen en la corrida
+        if: always()
+        run: cat e2e/REGISTRO.md >> "$GITHUB_STEP_SUMMARY" || true

@@ -1,0 +1,21 @@
+{
+  "name": "archivo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Directorio de contactos: API Express + SQLite y frontend React, con su pirámide de pruebas",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "instalar": "npm --prefix backend install && npm --prefix frontend install && npm --prefix e2e install",
+    "test": "npm run test:unit && npm run test:int && npm run test:e2e",
+    "test:unit": "npm --prefix backend run test:unit",
+    "test:int": "npm --prefix backend run test:int",
+    "test:back": "npm --prefix backend test",
+    "test:e2e": "npm --prefix e2e test",
+    "test:cobertura": "npm --prefix backend run test:coverage",
+    "reporte": "npm --prefix e2e run reporte",
+    "dev:back": "npm --prefix backend run dev",
+    "dev:front": "npm --prefix frontend run dev"
+  }
+}

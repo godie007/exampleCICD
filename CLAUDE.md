@@ -16,7 +16,26 @@ cd frontend && npm install && npm run dev   # npm run build / npm run preview
 
 Ambos deben estar corriendo: Vite proxea `/api` → `localhost:3001`.
 
-No hay tests, linter ni pipeline de CI configurados en el repo.
+No hay linter configurado en el repo.
+
+### Pruebas
+
+Tres capas, todas en español. Desde la raíz:
+
+```bash
+npm run instalar     # dependencias de los tres proyectos
+npm test             # las tres capas en orden: unitarias → integración → e2e
+npm run test:unit    # backend con el driver node:sqlite falseado
+npm run test:int     # backend contra SQLite real en archivo temporal
+npm run test:e2e     # Playwright sobre la app viva (levanta backend y frontend solo)
+npm run reporte      # e2e/REGISTRO.md: trazabilidad caso de uso → prueba → estado
+```
+
+- **Unitarias** (`backend/tests/*.test.js`) — falsean `node:sqlite` (`tests/helpers/fake-sqlite.js`) para que `db.js` y `contacts.js` corran sin tocar disco. Cobertura 100% de `contacts.js`, `validate.js` y `db.js`; `index.js` queda a 0% porque llama a `app.listen()` al importarse.
+- **Integración** (`backend/tests/*.int.test.js`) — driver real, ubicación redirigida a un archivo temporal subclasando `DatabaseSync` (`tests/helpers/real-sqlite.js`). **Nunca deben tocar `backend/data/archivo.db`.**
+- **E2E** (`e2e/`, Playwright) — un spec por caso de uso del vault (CU-01…CU-06). Locators **por rol y etiqueta**, nunca por clases CSS; el frontend no tiene ni necesita `data-testid`. Estas sí escriben en la base de desarrollo, así que cada prueba crea sus datos con email único y los borra por API.
+
+CI en `.github/workflows/ci.yml`: un job de backend (unitarias, integración y cobertura) y otro de e2e que solo corre si el primero pasa. Ambos publican sus reportes como artefactos.
 
 ## Arquitectura
 

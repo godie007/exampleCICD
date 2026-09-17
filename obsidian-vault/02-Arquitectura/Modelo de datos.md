@@ -87,8 +87,22 @@ No hay migraciones. El procedimiento real hoy:
 
 El paso 4 destruye datos: aceptable en local, inviable en cualquier entorno compartido. Es el ítem #4 del [[Roadmap y backlog]] y la consecuencia asumida en [[ADR-001 node sqlite sin ORM]].
 
+## Orden del listado · `COLLATE NOCASE` es ASCII puro
+
+`GET /api/contacts` ordena con `ORDER BY nombre COLLATE NOCASE ASC`, y **el orden lo aplica SQLite, no JavaScript** — hay una prueba de integración que lo fija.
+
+`NOCASE` ignora mayúsculas, pero **no pliega acentos**: compara bytes, y los caracteres acentuados viven por encima de `Z`. El resultado real:
+
+```
+Ana Beltrán | bruno díaz | Zoe Ángel | Zulema Ortiz | Ángela Ruiz
+```
+
+`Ángela Ruiz` queda **la última**, detrás de la Z. Un `sort()` en JavaScript con `localeCompare` la pondría entre `Ana` y `bruno`. No es un error del código: es lo que hace la colación elegida, y es visible para quien usa la app. Si algún día debe plegar acentos, hará falta `COLLATE` personalizada o normalizar en una columna auxiliar. Anotado como ítem #8b del [[Roadmap y backlog]].
+
 ## Índices
 
 Solo los implícitos: clave primaria y `UNIQUE(email)`. El `ORDER BY nombre COLLATE NOCASE` hace un scan + sort. Irrelevante con decenas de filas; anotado en [[Riesgos y deuda técnica]].
+
+`UNIQUE(email)` es **la única restricción única de la tabla**, y de eso depende que [[ADR-005 Conflicto de email detectado por texto]] pueda atribuir cualquier conflicto al campo email. Hay una prueba que lo fija: si se añade una segunda columna `UNIQUE`, se pondrá roja.
 
 Relacionado: [[Backend API]], [[Contrato de API]], [[Glosario]].

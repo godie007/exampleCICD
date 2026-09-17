@@ -17,7 +17,7 @@ quadrantChart
     quadrant-2 "Vigilar"
     quadrant-3 "Aceptar"
     quadrant-4 "Corregir barato"
-    "Sin tests ni CI": [0.92, 0.9]
+    "Sin linter": [0.8, 0.35]
     "Sin migraciones": [0.75, 0.85]
     "409 por texto": [0.35, 0.72]
     "Sin autenticación": [0.5, 0.95]
@@ -29,20 +29,27 @@ quadrantChart
     "Body 32kb da 500": [0.25, 0.2]
 ```
 
-## Riesgo 1 — Sin tests ni pipeline · **alto / probable**
+## Riesgo 1 — ~~Sin tests ni pipeline~~ · **resuelto**
 
-Ningún cambio tiene red de seguridad. Es la causa raíz de que los demás riesgos no se detecten solos.
-→ [[CI-CD]], [[Roadmap y backlog]] #1 y #2.
+Era la causa raíz de que los demás riesgos no se detectaran solos. Hoy hay **251 pruebas en tres capas** y CI en cada push.
+→ [[Estrategia de pruebas]], [[CI-CD]].
+
+Lo que queda de este riesgo, mucho más pequeño:
+- **`index.js` sin cubrir** (0 %): health, CORS y el límite de 32 kB no tienen prueba, porque el módulo llama a `app.listen()` al importarse.
+- **`frontend/` sin pruebas de componente**: no hay Vitest ni testing-library; la UI solo se cubre de extremo a extremo.
+- **Sin linter** ([[Roadmap y backlog]] #3): es ahora el hueco de calidad más grande.
 
 ## Riesgo 2 — Sin migraciones de esquema · **alto**
 
 El único camino para cambiar la tabla es **borrar la base**. Bloquea cualquier evolución del modelo fuera de local.
 → [[ADR-001 node sqlite sin ORM]], [[Modelo de datos]].
 
-## Riesgo 3 — El 409 depende del texto de un mensaje · **alto si ocurre**
+## Riesgo 3 — El 409 depende del texto de un mensaje · **mitigado, no eliminado**
 
-`isUniqueConflict` busca la palabra `"unique"` en el mensaje de error de `node:sqlite`, que es una API **experimental**. Si cambia la redacción, los duplicados pasan de un 409 claro a un 500 genérico, y nada lo detecta.
-→ [[ADR-005 Conflicto de email detectado por texto]]. **Mitigación más barata del vault: un test de integración.**
+`isUniqueConflict` sigue buscando la palabra `"unique"` en el mensaje de error de `node:sqlite`, que es una API **experimental**. La diferencia es que ahora **hay pruebas que avisan**: si Node cambia la redacción, la suite se pone roja en vez de degradar el 409 a un 500 silencioso en producción.
+
+Y hay algo mejor disponible: el error ya trae **`errcode: 2067`** (`SQLITE_CONSTRAINT_UNIQUE`), el código estable que la ADR dio por inexistente. Cambiar a inspeccionar el código es una línea, ya respaldada por pruebas.
+→ [[ADR-005 Conflicto de email detectado por texto]] § *Revisión*.
 
 ## Riesgo 4 — Sin autenticación · **crítico fuera de localhost**
 
@@ -79,9 +86,9 @@ Un build commiteado terminará por no corresponder al fuente. Decidir: ignorarlo
 | Deuda | Dónde | Arreglo |
 |---|---|---|
 | Body > 32 kB responde 500 en vez de 413 | [[Servidor Express]] | manejar el error de `express.json` |
-| `catch` del 409 duplicado en `POST` y `PUT` | [[Módulo contacts]] | extraer un helper (mejor con tests antes) |
+| `catch` del 409 duplicado en `POST` y `PUT` | [[Módulo contacts]] | extraer un helper — **ya hay tests que lo respaldan** |
 | Errores de formulario sin `aria-describedby` | [[ContactForm]] | asociar mensaje e input |
-| La búsqueda ignora `notas` y `telefono` | [[App estado]] | una línea en el `useMemo` |
+| La búsqueda ignora `notas` y `telefono` | [[App estado]] | una línea en el `useMemo`; hay una prueba e2e que fija el límite actual |
 | 404 durante edición → toast genérico | [[App estado]] | salir del modo edición y refrescar |
 | Sin índice en `nombre` | [[Modelo de datos]] | `CREATE INDEX` cuando importe |
 | Sin timeouts en `fetch` | [[Cliente API]] | `AbortController` |

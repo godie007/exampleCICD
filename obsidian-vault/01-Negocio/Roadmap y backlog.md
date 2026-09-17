@@ -10,9 +10,9 @@ Priorizado por **riesgo que elimina**, no por vistosidad. El criterio: primero l
 
 ```mermaid
 graph LR
-    subgraph Ahora
-        A1["Tests del backend"]
-        A2["Pipeline de CI"]
+    subgraph "Ahora"
+        A1["Tests ✅ hecho"]
+        A2["Pipeline de CI ✅ hecho"]
         A3["Linter + formato"]
     end
     subgraph Siguiente
@@ -34,21 +34,22 @@ graph LR
 
 ## Ahora — desbloquea todo lo demás
 
-| # | Ítem | Por qué primero |
+| # | Ítem | Estado |
 |---|---|---|
-| 1 | **Tests del backend** ([[Validación y normalización]] y [[Contrato de API]]) | `validate.js` es puro y determinista: es el mejor retorno por línea de test. Sin esto, cualquier refactor es a ciegas. |
-| 2 | **Pipeline de CI** | El repo se llama `exampleCICD` y no tiene ninguno. Ver [[CI-CD]] para el diseño propuesto. |
-| 3 | **Linter y formato** | No hay ESLint ni Prettier; el estilo actual es consistente por disciplina, no por herramienta. |
+| 1 | **Tests del backend** ([[Validación y normalización]] y [[Contrato de API]]) | ✅ **Hecho.** 251 pruebas en tres capas, con cobertura del 100 % en los tres módulos de `src/`. Ver [[Estrategia de pruebas]]. |
+| 2 | **Pipeline de CI** | ✅ **Hecho.** GitHub Actions con dos jobs; el de e2e solo corre si el backend pasa. Ver [[CI-CD]]. |
+| 3 | **Linter y formato** | ⏳ **Pendiente.** No hay ESLint ni Prettier; el estilo actual es consistente por disciplina, no por herramienta. Es ahora el ítem más prioritario. |
 
 ## Siguiente — deuda que ya se nota
 
 | # | Ítem | Detalle |
 |---|---|---|
 | 4 | **Migraciones de esquema** | Hoy el único camino para cambiar la tabla es borrar `backend/data/archivo.db`. Ver [[ADR-001 node sqlite sin ORM]]. |
-| 5 | **Buscar en `notas` y `telefono`** | Petición natural de la [[Personas y usuarios|consultora]]; una línea en el `useMemo` de [[App estado]]. |
+| 5 | **Buscar en `notas` y `telefono`** | Petición natural de la [[Personas y usuarios|consultora]]; una línea en el `useMemo` de [[App estado]]. El límite actual está fijado por una prueba e2e de CU-02, así que al ampliarlo hay que actualizarla. |
 | 6 | **404 en la UI** | Si otra pestaña borra un contacto, editarlo devuelve 404 y hoy solo sale un toast genérico. |
 | 7 | **Dockerfile / compose** | Levantar las dos apps con un comando. Ver [[Build y despliegue]]. |
 | 8 | **Índice en `nombre`** | El `ORDER BY nombre COLLATE NOCASE` no usa índice. Irrelevante ahora, barato después. |
+| 8b | **Ordenar nombres con acentos** | `COLLATE NOCASE` es ASCII puro: una inicial acentuada se ordena detrás de la Z. Visible para quien usa la app. Ver [[Modelo de datos]]. |
 
 ## Después — producto, no plomería
 

@@ -47,6 +47,7 @@ graph TD
     O --> O1["Entorno de desarrollo"]
     O --> O2["CI-CD"]
     O --> O3["Riesgos y deuda técnica"]
+    O --> O4["Estrategia de pruebas"]
 
     classDef raiz fill:#1f2937,stroke:#111827,color:#fff
     class MOC raiz
@@ -82,7 +83,8 @@ graph TD
 
 - [[Entorno de desarrollo]] — cómo levantarlo en local
 - [[Build y despliegue]] — qué existe y qué falta
-- [[CI-CD]] — **el hueco del repo**: se llama `exampleCICD` y no tiene pipeline
+- [[Estrategia de pruebas]] — 251 pruebas en tres capas y por qué cada una existe
+- [[CI-CD]] — el pipeline de GitHub Actions; queda pendiente el linter
 - [[Seguridad]] — CORS, límites de payload, superficie expuesta
 - [[Riesgos y deuda técnica]] — lo que rompería primero
 

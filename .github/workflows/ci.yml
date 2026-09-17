@@ -65,6 +65,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
+          # El package.json de la raíz solo orquesta y no tiene lock propio:
+          # sin estas rutas, setup-node busca uno en la raíz y falla.
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+            e2e/package-lock.json
 
       - name: Instalar dependencias
         run: |

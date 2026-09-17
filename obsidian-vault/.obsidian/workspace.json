@@ -1,0 +1,213 @@
+{
+  "main": {
+    "id": "2ca243e33cfe6846",
+    "type": "split",
+    "children": [
+      {
+        "id": "ccebf4cd3ffeb869",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "068b50084574100e",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Vista gráfica"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "d5061e61abefa55a",
+    "type": "split",
+    "children": [
+      {
+        "id": "c0c93b2fa6d41530",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4910990a81470b14",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de archivos"
+            }
+          },
+          {
+            "id": "56b372505acd0e6d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Buscar"
+            }
+          },
+          {
+            "id": "805ac7a4d95c71b1",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "c5c90c7d09d5e7ef",
+    "type": "split",
+    "children": [
+      {
+        "id": "12a208e67e55090c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "46108fdff3e53c33",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Enlaces entrantes"
+            }
+          },
+          {
+            "id": "1740bbd417d6ec29",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Enlaces salientes"
+            }
+          },
+          {
+            "id": "1fc4fb1a338b65a7",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "4b3716123510d2f0",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas las propiedades"
+            }
+          },
+          {
+            "id": "e88dea12b8eeacce",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Esquema"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir selector rápido": false,
+      "graph:Abrir vista gráfica": false,
+      "canvas:Crear nuevo lienzo": false,
+      "daily-notes:Abrir la nota de hoy": false,
+      "templates:Insertar plantilla": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Crear nueva base": false
+    }
+  },
+  "active": "068b50084574100e",
+  "lastOpenFiles": [
+    "05-Diagramas/Mapa del grafo.md",
+    "05-Diagramas/Estados de la UI.md",
+    "05-Diagramas/Modelo ER.md",
+    "05-Diagramas/Diagrama de secuencia.md",
+    "05-Diagramas/Diagrama de contexto.md",
+    "04-Operación/Riesgos y deuda técnica.md",
+    "04-Operación/Seguridad.md",
+    "04-Operación/CI-CD.md",
+    "04-Operación/Build y despliegue.md",
+    "04-Operación/Entorno de desarrollo.md",
+    "03-Componentes/Sistema visual.md",
+    "03-Componentes/ContactList.md",
+    "03-Componentes/ContactForm.md",
+    "03-Componentes/App estado.md",
+    "03-Componentes/Cliente API.md",
+    "02-Arquitectura/Modelo de datos.md",
+    "02-Arquitectura/Backend API.md",
+    "03-Componentes/Módulo validate.md",
+    "03-Componentes/Módulo contacts.md",
+    "03-Componentes/Módulo db.md",
+    "03-Componentes/Servidor Express.md",
+    "02-Arquitectura/ADR/ADR-005 Conflicto de email detectado por texto.md",
+    "02-Arquitectura/ADR/ADR-004 Statements preparados a nivel de módulo.md",
+    "02-Arquitectura/ADR/ADR-003 Refrescar la lista tras cada mutación.md",
+    "02-Arquitectura/ADR/ADR-002 Dos proyectos sin monorepo.md",
+    "02-Arquitectura/ADR/ADR-001 node sqlite sin ORM.md"
+  ]
+}
